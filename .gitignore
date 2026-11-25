@@ -1,0 +1,14 @@
+*.log
+*.conf
+*.fsdb
+*.rc
+*.key
+*verdiLog
+*simv.daidir
+*simv
+*csrc
+*.rep
+*vc_hdrs*
+*.dat
+*.vdb
+!PART5/programs/*.dat
