@@ -1,55 +1,13 @@
 `timescale 1ns/1ps
 
-
-
-
-
-
-
 module matmul_8x8 (
-
-
-
-
-
-
-
     input logic clk,
-
-
-
     input logic reset,
-
-
-
     input logic pe_reset,
-
-
-
     input logic start_mat_mul,
-
-
-
-
-
-
-
     output logic done_mat_mul,
-
-
-
-
-
-
-
     input logic [`AWIDTH-1:0] address_mat_a,
-
-
-
     input logic [`AWIDTH-1:0] address_mat_b,
-
-
-
     input logic [`AWIDTH-1:0] address_mat_c,
 
 
@@ -162,7 +120,7 @@ module matmul_8x8 (
 
 
 
-    output logic c_data_available_right,
+    output logic c_data_available_right
 
 
 
@@ -170,7 +128,7 @@ module matmul_8x8 (
 
 
 
-    output logic [`FWIDTH-1:0] flags
+    //output logic [`FWIDTH-1:0] flags
 
 
 
@@ -794,7 +752,7 @@ module matmul_8x8 (
 
 
 
-        .b_loc(8'd0),
+        .b_loc(8'd0)
 
 
 
@@ -802,7 +760,7 @@ module matmul_8x8 (
 
 
 
-        .flags(flags_00)
+        //.flags(flags_00)
 
 
 
@@ -1090,7 +1048,7 @@ module matmul_8x8 (
 
 
 
-        .b_loc(8'd0),
+        .b_loc(8'd0)
 
 
 
@@ -1098,7 +1056,7 @@ module matmul_8x8 (
 
 
 
-        .flags(flags_01)
+        //.flags(flags_01)
 
 
 
@@ -1374,7 +1332,7 @@ module matmul_8x8 (
 
 
 
-        .b_loc(8'd1),
+        .b_loc(8'd1)
 
 
 
@@ -1382,7 +1340,7 @@ module matmul_8x8 (
 
 
 
-        .flags(flags_10)
+        //.flags(flags_10)
 
 
 
@@ -1642,7 +1600,7 @@ module matmul_8x8 (
 
 
 
-        .b_loc(8'd1),
+        .b_loc(8'd1)
 
 
 
@@ -1650,7 +1608,7 @@ module matmul_8x8 (
 
 
 
-        .flags(flags_11)
+        //.flags(flags_11)
 
 
 
@@ -1726,7 +1684,7 @@ module matmul_8x8 (
 
 
 
-    always_comb begin
+    /*always_comb begin
 
 
 
@@ -1758,7 +1716,7 @@ module matmul_8x8 (
 
 
 
-    end
+    end*/
 
 
 

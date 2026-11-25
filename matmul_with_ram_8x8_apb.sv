@@ -84,7 +84,7 @@ module matrix_multiplication_8x8_apb (
         .start            (start_mat_mul),
         .pe_reset         (pe_reset),
         .done             (done_mat_mul),
-        .flags            (flags),
+        .flags            ('0),
 
         .address_mat_a    (address_mat_a),
         .address_mat_b    (address_mat_b),
@@ -202,9 +202,9 @@ module matrix_multiplication_8x8_apb (
         .c_addr_right           (c_addr_right),
 
         .c_data_available_left  (c_data_available_left),
-        .c_data_available_right (c_data_available_right),
+        .c_data_available_right (c_data_available_right)
 
-        .flags                  (flags)
+        //.flags                  (flags)
     );
 
 endmodule
