@@ -17,20 +17,21 @@ import uvm_pkg::*;
 `include "uvm_macros.svh"
 
  import apb_master_pkg::*;
- //import apb_slave_pkg::*;
  `include "apb_test.svh"
- 
+
 module testbench;
+
+
 	logic pclk;
 	logic presetn;
 	
   
-	logic [31:0] paddr;
+	logic [`ADDR_WIDTH-1:0] paddr;
 	logic        psel;
 	logic        penable;
 	logic        pwrite;
-	logic [31:0] prdata;
-	logic [31:0] pwdata;
+	logic [`DATA_WIDTH-1:0] prdata;
+	logic [`DATA_WIDTH-1:0] pwdata;
 
          matrix_multiplication_8x8_apb dut (
            .PCLK    (pclk),

@@ -25,20 +25,20 @@ all: compile_and_sim
 # Compile and run the UVM testbench
 compile_and_sim:
 	$(VCS) -R -full64 -sverilog -timescale=1ns/1ps -ntb_opts uvm \
-		-top matrix_multiplication_8x8_apb +incdir+. +incdir+common +incdir+master $(SV_SRCS) \
+		-top testbench +incdir+. +incdir+common +incdir+master $(SV_SRCS) \
 		-debug_access+all -kdb -lca +UVM_VERBOSITY=$(UVM_VERBOSITY) \
 		+ntb_random_seed=$(SEED) -l sim_$(SEED).log 2>&1 | tee compile_and_sim.log
 
 # Compile without running
 compile:
 	$(VCS) -full64 -sverilog -timescale=1ns/1ps -ntb_opts uvm \
-		-top matrix_multiplication_8x8_apb +incdir+. +incdir+common +incdir+master $(SV_SRCS) \
+		-top testbench +incdir+. +incdir+common +incdir+master $(SV_SRCS) \
 		-debug_access+all -lca -l comp.log 2>&1 | tee compile.log
 
 # Compile with the database needed by Verdi
 compile_verdi:
 	$(VCS) -full64 -sverilog -timescale=1ns/1ps -ntb_opts uvm \
-		-top matrix_multiplication_8x8_apb +incdir+. +incdir+common +incdir+master $(SV_SRCS) \
+		-top testbench +incdir+. +incdir+common +incdir+master $(SV_SRCS) \
 		-debug_access+all -kdb -lca -l compile_verdi.log
 
 # Run the compiled simulation
