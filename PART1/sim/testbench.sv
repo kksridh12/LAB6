@@ -32,17 +32,18 @@ module testbench;
 	logic        pwrite;
 	logic [`DATA_WIDTH-1:0] prdata;
 	logic [`DATA_WIDTH-1:0] pwdata;
+	logic        pready;
 
          matrix_multiplication_8x8_apb dut (
            .PCLK    (pclk),
            .PRESETn (presetn),
-           .PADDR   (PADDR),
-           .PWRITE  (PWRITE),
-           .PSEL    (PSEL),
-           .PENABLE (PENABLE),
-           .PWDATA  (PWDATA),
-           .PRDATA  (PRDATA),
-           .PREADY  (PREADY)
+           .PADDR   (paddr),
+           .PWRITE  (pwrite),
+           .PSEL    (psel),
+           .PENABLE (penable),
+           .PWDATA  (pwdata),
+           .PRDATA  (prdata),
+           .PREADY  (pready)
         );
 
 	initial begin
@@ -63,13 +64,13 @@ module testbench;
 	// apb interface
 	apb_if  apb_if(pclk,presetn);
   
-	assign PADDR   = apb_if.PADDR;
-	assign PWRITE  = apb_if.PWRITE;
-	assign PENABLE = apb_if.PENABLE;
-	assign PWDATA  = apb_if.PWDATA;
-	assign PSEL    = apb_if.PSEL;
-	assign apb_if.PRDATA = PRDATA;
-        assign apb_if.PREADY = PREADY;	
+	assign paddr   = apb_if.PADDR;
+	assign pwrite  = apb_if.PWRITE;
+	assign penable = apb_if.PENABLE;
+	assign pwdata  = apb_if.PWDATA;
+	assign psel    = apb_if.PSEL;
+	assign apb_if.PRDATA = prdata;
+        assign apb_if.PREADY = pready;
 
 	initial begin
 		uvm_config_db#(virtual apb_if)::set( null, "", "apb_vif", apb_if);
@@ -78,5 +79,6 @@ module testbench;
 	end
 	
 endmodule
+
 
 
