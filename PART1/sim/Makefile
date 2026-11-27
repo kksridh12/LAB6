@@ -10,7 +10,13 @@ SV_SRCS := \
 	../../matmul_8x8.sv \
 	../../matmul.v \
 	../../ram.sv \
-	../../apb_slave.sv
+	../../apb_slave.sv \
+	common/apb_common_pkg.sv \
+	common/apb_if.sv \
+	master/apb_master_pkg.sv \
+	apb_test.svh \
+	apb_env.svh \
+        testbench.sv
 
 .PHONY: all compile_and_sim compile compile_verdi sim verdi waves gui clean
 
@@ -19,20 +25,20 @@ all: compile_and_sim
 # Compile and run the UVM testbench
 compile_and_sim:
 	$(VCS) -R -full64 -sverilog -timescale=1ns/1ps -ntb_opts uvm \
-		-top matrix_multiplication_8x8_apb +incdir+. +incdir+../../pipeline $(SV_SRCS) \
+		-top matrix_multiplication_8x8_apb +incdir+. +incdir+common +incdir+master $(SV_SRCS) \
 		-debug_access+all -kdb -lca +UVM_VERBOSITY=$(UVM_VERBOSITY) \
 		+ntb_random_seed=$(SEED) -l sim_$(SEED).log 2>&1 | tee compile_and_sim.log
 
 # Compile without running
 compile:
 	$(VCS) -full64 -sverilog -timescale=1ns/1ps -ntb_opts uvm \
-		-top matrix_multiplication_8x8_apb +incdir+. +incdir+../../pipeline $(SV_SRCS) \
+		-top matrix_multiplication_8x8_apb +incdir+. +incdir+common +incdir+master $(SV_SRCS) \
 		-debug_access+all -lca -l comp.log 2>&1 | tee compile.log
 
 # Compile with the database needed by Verdi
 compile_verdi:
 	$(VCS) -full64 -sverilog -timescale=1ns/1ps -ntb_opts uvm \
-		-top matrix_multiplication_8x8_apb +incdir+. +incdir+../../pipeline $(SV_SRCS) \
+		-top matrix_multiplication_8x8_apb +incdir+. +incdir+common +incdir+master $(SV_SRCS) \
 		-debug_access+all -kdb -lca -l compile_verdi.log
 
 # Run the compiled simulation
