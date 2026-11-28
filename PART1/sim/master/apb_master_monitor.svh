@@ -21,7 +21,7 @@ class apb_master_monitor extends uvm_monitor;
 
 	virtual apb_if vif;
 	uvm_analysis_port#(apb_master_seq_item) ap;
-	
+        uvm_event done;	
 	apb_master_seq_item tr;
 	
 	//------------------------------------------
@@ -58,6 +58,7 @@ function void apb_master_monitor::build_phase(uvm_phase phase);
 	if (!uvm_config_db#(virtual apb_if)::get(this, "", "apb_vif", vif)) begin
 		`uvm_fatal(get_full_name(), "No virtual interface specified for apb_master_driver")
 	end 
+        done = uvm_event_pool::get_global("done_set");
 		
 endfunction: build_phase
 
@@ -85,6 +86,7 @@ task apb_master_monitor::run_phase(uvm_phase phase);
 		
 		apb_cov.sample();
 		ap.write(tr);
+		if (tr.addr == 'h2 && tr.data == 'h8000) done.trigger(tr);
 		
 	end
 endtask	

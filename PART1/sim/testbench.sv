@@ -51,9 +51,9 @@ module testbench;
 	end
 	
 	initial begin
-		presetn=1; 
+		presetn=0; 
 		#40; 
-		presetn=0;
+		presetn=1;
 	end	
 
 	//Generate a clock
@@ -73,12 +73,47 @@ module testbench;
         assign apb_if.PREADY = pready;
 
 	initial begin
+		load_matrices(32'h1, 32'h2);
 		uvm_config_db#(virtual apb_if)::set( null, "", "apb_vif", apb_if);
 		uvm_top.enable_print_topology = 1; // Use this to debug uvm build phase and make sure all verification components are built correctly.
 		run_test("apb_test");
 	end
-	
-endmodule
+	// --------------------------------------------------------------------------
+        // Waveform dump for Verdi
+        // --------------------------------------------------------------------------
+        initial begin
+           $fsdbDumpfile("novas.fsdb");
+           $fsdbDumpvars(0, testbench);
+           $fsdbDumpvars(0, "+mda");
+        end
 
+// --------------------------------------------------------
+// RAM initialization
+// --------------------------------------------------------
+task automatic load_matrices(
+    input logic [31:0] a_value,
+    input logic [31:0] b_value
+);
+    for (int i = 0; i < (1<<`ADDR_WIDTH); i++) begin
+        dut.matrix_A0.ram[i] = 32'b0;
+        dut.matrix_A1.ram[i] = 32'b0;
+        dut.matrix_B0.ram[i] = 32'b0;
+        dut.matrix_B1.ram[i] = 32'b0;
+
+            // Sentinel prevents a false pass in the zero test.
+        dut.matrix_C0.ram[i] = 32'hDEADBEEF;
+        dut.matrix_C1.ram[i] = 32'hDEADBEEF;
+    end
+
+    for (int i = 0; i < 8; i++) begin
+        dut.matrix_A0.ram[i] = {a_value};
+        dut.matrix_A1.ram[i] = {a_value};
+        dut.matrix_B0.ram[i] = {b_value};
+        dut.matrix_B1.ram[i] = {b_value};
+    end
+endtask
+
+
+endmodule
 
 

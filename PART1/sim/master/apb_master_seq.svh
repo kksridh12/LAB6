@@ -36,13 +36,67 @@ endfunction
 // Definition: body method that gets executed once sequence is started 
 task apb_master_seq::body();
 	apb_master_seq_item m_apb_master_seq_item;
-	
-	repeat(1) begin
-		m_apb_master_seq_item = apb_master_seq_item::type_id::create("m_apb_master_seq_item");
-		start_item(m_apb_master_seq_item);
-		assert (m_apb_master_seq_item.randomize());
-		finish_item(m_apb_master_seq_item);
+	bit [`ADDR_WIDTH-1:0] used_addrs[$];
+	uvm_event done;
+
+	done = uvm_event_pool::get_global("done_set");
+
+	// initialize address bits for RAM A,B,C 
+	repeat(3) begin
+        `uvm_do_with(m_apb_master_seq_item, 
+		 {m_apb_master_seq_item.apb_tr == WRITE;
+		  m_apb_master_seq_item.addr >= 'h4 && m_apb_master_seq_item.addr <= 'h8; 
+	          m_apb_master_seq_item.data==0;
+                  !(m_apb_master_seq_item.addr inside {used_addrs}); 
+	         });
+        used_addrs.push_back(m_apb_master_seq_item.addr);
+        end
+	// initialize stribe bits
+	used_addrs.delete();
+	repeat(3) begin
+        `uvm_do_with(m_apb_master_seq_item, 
+		 {m_apb_master_seq_item.apb_tr == WRITE;
+		  m_apb_master_seq_item.addr >= 'hA && m_apb_master_seq_item.addr <= 'hE; 
+	          m_apb_master_seq_item.data==1;
+                  !(m_apb_master_seq_item.addr inside {used_addrs}); 
+	         });
+        used_addrs.push_back(m_apb_master_seq_item.addr);
 	end
+	// read back the stride bits
+	used_addrs.delete();
+	repeat(3) begin
+        `uvm_do_with(m_apb_master_seq_item, 
+		 {m_apb_master_seq_item.apb_tr == READ;
+		  m_apb_master_seq_item.addr >= 'hA && m_apb_master_seq_item.addr <= 'hE; 
+                  !(m_apb_master_seq_item.addr inside {used_addrs}); 
+	         });
+        used_addrs.push_back(m_apb_master_seq_item.addr);
+	end
+	// read the busy and done bit and make sure it is 0
+        `uvm_do_with(m_apb_master_seq_item, 
+		 {m_apb_master_seq_item.apb_tr == READ;
+		  m_apb_master_seq_item.addr >= 'h0 && m_apb_master_seq_item.addr <= 'h2; 
+	         });
+        // Write start bit 
+        `uvm_do_with(m_apb_master_seq_item, 
+		 {m_apb_master_seq_item.apb_tr == WRITE;
+		  m_apb_master_seq_item.addr == 'h0; 
+	          m_apb_master_seq_item.data ==16'h0001;
+	         });
+        
+	while(!done.is_on()) begin
+	   `uvm_do_with(m_apb_master_seq_item, 
+		 {m_apb_master_seq_item.apb_tr == READ;
+		  m_apb_master_seq_item.addr == 'h2; 
+	         });
+ 	end
+	done.reset();
+	//repeat(1) begin
+	//	m_apb_master_seq_item = apb_master_seq_item::type_id::create("m_apb_master_seq_item");
+	//	start_item(m_apb_master_seq_item);
+	//	assert (m_apb_master_seq_item.randomize());
+	//	finish_item(m_apb_master_seq_item);
+	//end
 endtask
 	
 `endif
