@@ -3,6 +3,11 @@ VERDI ?= $(VERDI_HOME)/bin/verdi
 SEED ?= 1
 UVM_VERBOSITY ?= UVM_HIGH
 
+# Enable UVM debug traces when verbosity is UVM_HIGH
+ifeq ($(UVM_VERBOSITY),UVM_HIGH)
+UVM_DEBUG = +UVM_CONFIG_DB_TRACE +UVM_OBJECTION_TRACE +UVM_PHASE_TRACE
+endif
+
 # Sources are listed relative to PART2/sim; top.sv comes first because it
 # declares typedefs used by the other RTL modules.
 SV_SRCS := \
@@ -26,7 +31,7 @@ all: compile_and_sim
 compile_and_sim:
 	$(VCS) -R -full64 -sverilog -timescale=1ns/1ps -ntb_opts uvm \
 		-top testbench +incdir+. +incdir+common +incdir+master $(SV_SRCS) \
-		-debug_access+all -kdb -lca +UVM_VERBOSITY=$(UVM_VERBOSITY) \
+		-debug_access+all -kdb -lca +UVM_VERBOSITY=$(UVM_VERBOSITY) $(UVM_DEBUG) \
 		+ntb_random_seed=$(SEED) -l sim_$(SEED).log 2>&1 | tee compile_and_sim.log
 
 # Compile without running
@@ -43,7 +48,7 @@ compile_verdi:
 
 # Run the compiled simulation
 sim:
-	./simv +UVM_VERBOSITY=$(UVM_VERBOSITY) +ntb_random_seed=$(SEED) -l sim_$(SEED).log
+	./simv +UVM_VERBOSITY=$(UVM_VERBOSITY) $(UVM_DEBUG) +ntb_random_seed=$(SEED) -l sim_$(SEED).log
 
 # Launch Verdi, optionally loading the generated waveform database
 verdi:
