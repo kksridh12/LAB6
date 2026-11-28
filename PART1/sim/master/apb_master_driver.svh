@@ -66,7 +66,7 @@ task apb_master_driver::get_and_drive();
 		seq_item_port.get_next_item(m_apb_master_seq_item);
 		
 		repeat(m_apb_master_seq_item.delay)
-			@(posedge vif.PCLK);
+			@(negedge vif.PCLK);
 		
 		vif.master.PSEL    <= 1'b1;
 		vif.master.PADDR   <= m_apb_master_seq_item.addr;
@@ -75,12 +75,12 @@ task apb_master_driver::get_and_drive();
 		if(m_apb_master_seq_item.apb_tr == apb_master_seq_item::WRITE)
 			vif.master.PWDATA  <= m_apb_master_seq_item.data;
 		
-		@ (posedge vif.PCLK);
+		@ (negedge vif.PCLK);
 		vif.master.PENABLE <= '1;
 		
 		wait(vif.master.PREADY);	
 		
-		@ (posedge vif.PCLK);
+		@ (negedge vif.PCLK);
 		vif.master.PSEL    <= '0;
 		vif.master.PENABLE <= '0;		
 		

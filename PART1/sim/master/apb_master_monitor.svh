@@ -73,7 +73,7 @@ task apb_master_monitor::run_phase(uvm_phase phase);
         tr.apb_tr = (this.vif.master.PWRITE) ? apb_master_seq_item::WRITE : apb_master_seq_item::READ;
 		tr.addr = this.vif.master.PADDR;
 		
-		@ (posedge vif.PCLK);
+		@ (negedge vif.PCLK);
 		wait (this.vif.master.PENABLE === 1'b1 && this.vif.master.PREADY === 1'b1);
 		
 		if(this.vif.master.PWRITE) 	

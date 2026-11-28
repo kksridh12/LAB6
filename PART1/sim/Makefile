@@ -1,7 +1,7 @@
 VCS ?= $(VCS_HOME)/bin/vcs
 VERDI ?= $(VERDI_HOME)/bin/verdi
 SEED ?= 1
-UVM_VERBOSITY ?= UVM_MEDIUM
+UVM_VERBOSITY ?= UVM_HIGH
 
 # Sources are listed relative to PART2/sim; top.sv comes first because it
 # declares typedefs used by the other RTL modules.
