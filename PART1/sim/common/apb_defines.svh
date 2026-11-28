@@ -16,6 +16,6 @@
 `define _APB_DEFINES_
 
 `define ADDR_WIDTH 10               // APB PADDR BUS width           
-`define DATA_WIDTH 8               // APB PWDATA and PRDATA Bus width
+`define DATA_WIDTH 16               // APB PWDATA and PRDATA Bus width
 
 `endif
