@@ -23,6 +23,7 @@ class apb_master_seq_item extends apb_base_seq_item;
 	//--------------------------------------------------------------------
 	extern function new (string name = "apb_master_seq_item");
 	extern function string convert2string();
+	extern function string convert2string_for_drv(bit show_data=1);
 endclass
 
 // Function: new
@@ -36,11 +37,26 @@ endfunction
 function string apb_master_seq_item::convert2string();
 	return $psprintf("\n \
 -------------------------APB_MASTER_TRANSFER------------------------- \n \
-DIR.=%s \n \
+DIR=%s \n \
 ADDR=%0h \n \
 DATA=%0h \n \
 --------------------------------------------------------------",apb_tr,addr,data);
 endfunction : convert2string
 
-
+function string apb_master_seq_item::convert2string_for_drv(bit show_data);
+	if (show_data) begin
+	return $psprintf("\n \
+-------------------------APB_MASTER_TRANSFER------------------------- \n \
+DIR=%s \n \
+ADDR=%0h \n \
+DATA=%0h \n \
+--------------------------------------------------------------",apb_tr,addr,data);
+end else begin
+return $psprintf("\n \
+-------------------------APB_MASTER_TRANSFER------------------------- \n \
+DIR=%s \n \
+ADDR=%0h \n \
+--------------------------------------------------------------",apb_tr,addr);
+end
+endfunction : convert2string_for_drv
 `endif

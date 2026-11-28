@@ -84,7 +84,11 @@ task apb_master_driver::get_and_drive();
 		vif.master.PSEL    <= '0;
 		vif.master.PENABLE <= '0;		
 		
-		uvm_report_info("APB_MASTER_DRIVER ", $psprintf(" %s",m_apb_master_seq_item.convert2string()));
+		if (m_apb_master_seq_item.apb_tr == apb_master_seq_item::WRITE) begin
+		  uvm_report_info("APB_MASTER_DRIVER ", $psprintf(" %s",m_apb_master_seq_item.convert2string_for_drv()));
+                end else begin
+		  uvm_report_info("APB_MASTER_DRIVER ", $psprintf(" %s",m_apb_master_seq_item.convert2string_for_drv(0)));
+		end
 		seq_item_port.item_done();
 	end		
 		
