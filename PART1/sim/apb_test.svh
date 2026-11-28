@@ -42,6 +42,7 @@ class apb_test extends uvm_test;
 	extern function new(string name = "apb_test", uvm_component parent = null );
 	extern virtual function void build_phase(uvm_phase phase);
 	extern virtual task run_phase(uvm_phase phase);  
+	extern virtual function void end_of_elaboration_phase(uvm_phase phase);
 
 
 endclass
@@ -88,5 +89,10 @@ task apb_test::run_phase( uvm_phase phase );
 	phase.drop_objection( this , "Finished apb_test in run phase" );
 endtask: run_phase	
 
+function void apb_test::end_of_elaboration_phase (uvm_phase phase);
+     super.end_of_elaboration_phase(phase);
+     //uvm_top.print_config(1, 1);   // recurse, audit
+     env.print();
+endfunction
 
 `endif

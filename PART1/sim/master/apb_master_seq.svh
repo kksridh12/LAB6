@@ -49,6 +49,7 @@ task apb_master_seq::body();
 	          m_apb_master_seq_item.data==0;
                   !(m_apb_master_seq_item.addr inside {used_addrs}); 
 	         });
+		 m_apb_master_seq_item.print();
         used_addrs.push_back(m_apb_master_seq_item.addr);
         end
 	// initialize stribe bits
@@ -60,6 +61,7 @@ task apb_master_seq::body();
 	          m_apb_master_seq_item.data==1;
                   !(m_apb_master_seq_item.addr inside {used_addrs}); 
 	         });
+		 m_apb_master_seq_item.print();
         used_addrs.push_back(m_apb_master_seq_item.addr);
 	end
 	// read back the stride bits
@@ -70,6 +72,7 @@ task apb_master_seq::body();
 		  m_apb_master_seq_item.addr >= 'hA && m_apb_master_seq_item.addr <= 'hE; 
                   !(m_apb_master_seq_item.addr inside {used_addrs}); 
 	         });
+		 m_apb_master_seq_item.print();
         used_addrs.push_back(m_apb_master_seq_item.addr);
 	end
 	// read the busy and done bit and make sure it is 0
@@ -77,18 +80,21 @@ task apb_master_seq::body();
 		 {m_apb_master_seq_item.apb_tr == READ;
 		  m_apb_master_seq_item.addr >= 'h0 && m_apb_master_seq_item.addr <= 'h2; 
 	         });
+		 m_apb_master_seq_item.print();
         // Write start bit 
         `uvm_do_with(m_apb_master_seq_item, 
 		 {m_apb_master_seq_item.apb_tr == WRITE;
 		  m_apb_master_seq_item.addr == 'h0; 
 	          m_apb_master_seq_item.data ==16'h0001;
 	         });
+		 m_apb_master_seq_item.print();
         
 	while(!done.is_on()) begin
 	   `uvm_do_with(m_apb_master_seq_item, 
 		 {m_apb_master_seq_item.apb_tr == READ;
 		  m_apb_master_seq_item.addr == 'h2; 
 	         });
+		 m_apb_master_seq_item.print();
  	end
 	done.reset();
 	//repeat(1) begin

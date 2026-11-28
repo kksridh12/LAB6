@@ -16,7 +16,7 @@
 `define _APB_BASE_SEQ_ITEM_
 
 class apb_base_seq_item extends uvm_sequence_item;
-	`uvm_object_utils(apb_base_seq_item)
+	//`uvm_object_utils(apb_base_seq_item)
 	
 	//typedef for READ/Write transaction type
 	typedef enum {READ, WRITE} apb_transfer_direction_t;		
@@ -38,6 +38,13 @@ class apb_base_seq_item extends uvm_sequence_item;
 	//	Methods
 	//--------------------------------------------------------------------		
 	extern function new(string name = "apb_base_seq_item");
+
+	`uvm_object_utils_begin(apb_base_seq_item)
+             `uvm_field_int (addr,  UVM_ALL_ON)
+             `uvm_field_int (data,  UVM_ALL_ON)
+             `uvm_field_int (delay, UVM_ALL_ON)
+             `uvm_field_enum(apb_transfer_direction_t, apb_tr, UVM_ALL_ON)
+        `uvm_object_utils_end
 endclass
 
 // Function: new
