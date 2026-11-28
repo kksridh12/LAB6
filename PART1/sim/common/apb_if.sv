@@ -33,16 +33,16 @@ interface apb_if(input bit PCLK, PRESET_N);
 	endclocking: master_cb
 	
 	
-	clocking slave_cb @(posedge PCLK);
-		input  PADDR, PSEL, PENABLE, PWRITE, PWDATA;
-		output PRDATA, PREADY;
-	endclocking: slave_cb
+	//clocking slave_cb @(posedge PCLK);
+	//	input  PADDR, PSEL, PENABLE, PWRITE, PWDATA;
+	//	output PRDATA, PREADY;
+	//endclocking: slave_cb
 	
 	modport master(	input  PRDATA, PREADY,PRESET_N,
 					output PADDR, PSEL, PENABLE, PWRITE, PWDATA	);
 	
-	modport slave(	input  PADDR, PSEL, PENABLE, PWRITE, PWDATA,PRESET_N,
-					output PRDATA, PREADY);
+	//modport slave(	input  PADDR, PSEL, PENABLE, PWRITE, PWDATA,PRESET_N,
+	//				output PRDATA, PREADY);
 	
 	
 	`define IDLE   (!PSEL & !PENABLE)

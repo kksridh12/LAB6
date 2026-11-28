@@ -69,6 +69,8 @@ module testbench;
 	assign penable = apb_if.PENABLE;
 	assign pwdata  = apb_if.PWDATA;
 	assign psel    = apb_if.PSEL;
+	assign apb_if.PRDATA = prdata;
+        assign apb_if.PREADY = pready;
 
 	initial begin
 		uvm_config_db#(virtual apb_if)::set( null, "", "apb_vif", apb_if);
